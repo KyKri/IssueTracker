@@ -1,13 +1,14 @@
-class HelloWorld extends React.Component {
+class IssueList extends React.Component {
     render() {
-        const continents = ['Africa', 'America', 'Asia', 'Australia', 'Europe'];
-        const helloContinents = Array.from(continents, c => `Hello ${c}!`);
-        const message = helloContinents.join(' ');
-
         return (
-            <div title="Outer div">
-                <h1>{message}</h1>
-            </div>
+            <React.Fragment>
+                <h1>Issue Tracker</h1>
+                <IssueFilter/>
+                <hr/>
+                <IssueTable/>
+                <hr/>
+                <IssueAdd/>
+            </React.Fragment>
         );
     }
 }
@@ -36,6 +37,6 @@ class IssueAdd extends React.Component {
     }
 }
 
-const element = <HelloWorld/>;
+const element = <IssueList/>;
 
 ReactDOM.render(element, document.getElementById('content'));
