@@ -62,12 +62,12 @@ var IssueFilter = /*#__PURE__*/function (_React$Component) {
 }(React.Component);
 
 function IssueRow(props) {
-  var issue = this.props.issue;
+  var issue = props.issue;
   return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, issue.id), /*#__PURE__*/React.createElement("td", null, issue.status), /*#__PURE__*/React.createElement("td", null, issue.owner), /*#__PURE__*/React.createElement("td", null, issue.created.toDateString()), /*#__PURE__*/React.createElement("td", null, issue.effort), /*#__PURE__*/React.createElement("td", null, issue.due ? issue.due.toDateString() : ''), /*#__PURE__*/React.createElement("td", null, issue.title));
 }
 
 function IssueTable(props) {
-  var issueRows = this.props.issues.map(function (issue) {
+  var issueRows = props.issues.map(function (issue) {
     return /*#__PURE__*/React.createElement(IssueRow, {
       key: issue.id,
       issue: issue
