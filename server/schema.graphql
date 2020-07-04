@@ -1,6 +1,20 @@
-type Query {
-   about: String!
+type Issue {
+    id: Int!
+    title: String!
+    status: String!
+    owner: String
+    effort: Int
+    created: String!
+    due: String
 }
+
+# Top level definitions
+
+type Query {
+    about: String!
+    issueList: [Issue!]!
+}
+
 type Mutation {
-   setAboutMessage(message: String!): String
+    setAboutMessage(message: String!): String
 }
