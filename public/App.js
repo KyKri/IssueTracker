@@ -94,7 +94,8 @@ var IssueAdd = /*#__PURE__*/function (_React$Component2) {
       var issue = {
         owner: form.owner.value,
         title: form.title.value,
-        status: 'New'
+        due: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10) // Add ten days to current date
+
       };
       this.props.createIssue(issue);
       form.owner.value = "";
