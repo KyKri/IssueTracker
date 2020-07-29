@@ -4,6 +4,8 @@ const { MongoClient } = require('mongodb');
 // vars and consts
 const url = 'mongodb://localhost/issueTracker';
 const client = new MongoClient(url, { useNewUrlParser: true });
+const employee1 = { id: 1, name: 'A. Callback', age: 23 };
+const employee2 = { id: 1, name: 'A. Callback', age: 23 };
 
 function testWithCallbacks(callback) {
     console.log('\n--- testWithCallbacks ---');
@@ -18,9 +20,8 @@ function testWithCallbacks(callback) {
 
         const db = client.db();
         const collection = db.collection('employees');
-        const employee = { id: 1, name: 'A. Callback', age: 23 };
     
-        collection.insertOne(employee, (err, result) => {
+        collection.insertOne(employee1, (err, result) => {
             if (err) {
                 client.close();
                 callback(err);
@@ -46,8 +47,35 @@ function testWithCallbacks(callback) {
     });
 }
 
+async function testWithAsync() {
+    console.log("\n--- Test with async ---");
+    try {
+        await client.connect();
+
+        console.log("Connected to mongo.");
+
+        const db = client.db();
+        const collection = db.collection('employees');
+        const result = await collection.insertOne(employee2);
+
+        console.log("Result of insert:\n" + result.insertedId);
+
+        const docs = await collection.find({_id: result.insertedId})
+            .toArray();
+        
+        console.log("Result of find:\n" + docs);
+
+    } catch (err) {
+        console.log(err);
+    } finally {
+        client.close();
+    }
+}
+
 testWithCallbacks((err) => {
     if (err) {
         console.log(err);
     }
 });
+
+testWithAsync();
