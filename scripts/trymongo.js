@@ -5,7 +5,7 @@ const { MongoClient } = require('mongodb');
 const url = 'mongodb://localhost/issueTracker';
 const client = new MongoClient(url, { useNewUrlParser: true });
 const employee1 = { id: 1, name: 'A. Callback', age: 23 };
-const employee2 = { id: 1, name: 'A. Callback', age: 23 };
+const employee2 = { id: 2, name: 'B. Async', age: 23 };
 
 function testWithCallbacks(callback) {
     console.log('\n--- testWithCallbacks ---');
