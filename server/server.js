@@ -10,26 +10,6 @@ const { MongoClient } = require('mongodb');
 let aboutMessage = "Issue Tracker API v1.0";
 let db;
 const url = 'mongodb://localhost/issueTracker';
-const issuesDB = [
-    {
-        id: 1,
-        status: 'New',
-        owner: 'Ravan',
-        effort: 5,
-        created: new Date('2018-08-15'),
-        due: undefined,
-        title: 'Error in console when clicking Add'
-    },
-    {
-        id: 2,
-        status: 'Assigned',
-        owner: 'Eddie',
-        effort: 14,
-        created: new Date('2018-08-16'),
-        due: new Date('2018-08-30'),
-        title: 'Missing bottom border on panel'
-    }
-];
 
 // Database
 async function connectToDb() {
@@ -39,6 +19,16 @@ async function connectToDb() {
     console.log('Connected to DB');
 
     db = client.db();
+}
+
+async function getNextSequence(name) {
+    const result = await db.collection('counters').findOneAndUpdate(
+        { _id: name },
+        { $inc: { current: 1 } },
+        { returnOriginal: false }
+    );
+    
+    return result.value.current;
 }
 
 // Validation
@@ -69,13 +59,17 @@ function setAboutMessage(_, { message }) {
     return aboutMessage = message;
 }
 
-function issueAdd(_, { issue }) {
+async function issueAdd(_, { issue }) {
     validateIssue(issue);
+
     issue.created = new Date();
-    issue.id = issuesDB.length + 1;
+    issue.id = await getNextSequence('issues');
     if (issue.status == undefined) { issue.status = 'New'; }
-    issuesDB.push(issue);
-    return issue;
+
+    const result = await db.collection('issues').insertOne(issue);
+    const savedIssue = await db.collection('issues').findOne({_id: result.insertedId});
+    
+    return savedIssue;
 }
 
 // Custom type resolvers
