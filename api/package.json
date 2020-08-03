@@ -1,0 +1,19 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "API logic for the Issue Tracker application.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon -e js,graphql server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-express": "^2.15.1",
+    "express": "^4.17.1",
+    "graphql": "^15.2.0",
+    "mongodb": "^3.5.9",
+    "nodemon": "^1.19.4"
+  }
+}

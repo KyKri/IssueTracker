@@ -4,7 +4,7 @@
   "description": "Following along from the book Pro MERN Stack",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -w server -e js,graphql server/server.js",
+    "start": "nodemon -w uiserver.js uiserver.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "babel src --out-dir public",
     "watch": "babel src --out-dir public --watch --verbose"
@@ -12,12 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "apollo-server-express": "^2.15.1",
     "express": "^4.17.1",
-    "graphql": "^15.2.0",
-    "mongodb": "^3.5.9",
-    "nodemon": "^1.19.4",
-    "regenerator-runtime": "^0.13.5"
+    "nodemon": "^1.19.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
