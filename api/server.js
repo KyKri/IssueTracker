@@ -12,6 +12,7 @@ let aboutMessage = "Issue Tracker API v1.0";
 let db;
 const url = process.env.DB_URL || 'mongodb://localhost/issueTracker';
 const port = process.env.API_SERVER_PORT || 3000;
+const enableCORS = (process.env.ENABLE_CORS || true) == 'true'; //env var is a String, not a boolean
 
 // Database
 async function connectToDb() {
@@ -117,7 +118,8 @@ const server = new ApolloServer({
 // Express config
 const app = express();
 
-server.applyMiddleware({ app, path: '/graphql' });
+server.applyMiddleware({ app, path: '/graphql', cors: enableCORS });
+console.log("CORS setting", enableCORS);
 
 (async function() {
     try {
