@@ -1,8 +1,9 @@
 // imports
 const { MongoClient } = require('mongodb');
+require('dotenv').config();
 
 // vars and consts
-const url = 'mongodb://localhost/issueTracker';
+const url = process.env.DB_URL || 'mongodb://localhost/issueTracker';
 const client = new MongoClient(url, { useNewUrlParser: true });
 const employee1 = { id: 1, name: 'A. Callback', age: 23 };
 const employee2 = { id: 2, name: 'B. Async', age: 23 };
