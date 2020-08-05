@@ -16,5 +16,10 @@
     "graphql": "^15.2.0",
     "mongodb": "^3.5.9",
     "nodemon": "^1.19.4"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.22.0"
   }
 }
