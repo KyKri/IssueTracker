@@ -26,16 +26,29 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+/* eslint "react/react-in-jsx-scope": "off" */
+
+/* globals React ReactDOM */
+
+/* eslint "react/jsx-no-undef": "off" */
+
+/* eslint "react/no-multi-comp": "off" */
+
+/* eslint no-alert: "off" */
 var dateRegex = new RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d');
 
 function jsonDateReviver(key, value) {
-  if (dateRegex.test(value)) return new Date(value);
+  if (dateRegex.test(value)) {
+    return new Date(value);
+  }
+
   return value;
 }
 
 function graphQLFetch(_x) {
   return _graphQLFetch.apply(this, arguments);
-}
+} // eslint-disable-next-line react/prefer-stateless-function
+
 
 function _graphQLFetch() {
   _graphQLFetch = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(query) {
@@ -76,7 +89,7 @@ function _graphQLFetch() {
             if (result.errors) {
               error = result.errors[0];
 
-              if (error.extensions.code == 'BAD_USER_INPUT') {
+              if (error.extensions.code === 'BAD_USER_INPUT') {
                 details = error.extensions.exception.errors.join('\n ');
                 alert("".concat(error.message, ":\n ").concat(details));
               } else {
@@ -90,8 +103,9 @@ function _graphQLFetch() {
             _context3.prev = 13;
             _context3.t0 = _context3["catch"](1);
             alert("Error in sending data to server: ".concat(_context3.t0.message));
+            return _context3.abrupt("return", null);
 
-          case 16:
+          case 17:
           case "end":
             return _context3.stop();
         }
@@ -122,13 +136,14 @@ var IssueFilter = /*#__PURE__*/function (_React$Component) {
   return IssueFilter;
 }(React.Component);
 
-function IssueRow(props) {
-  var issue = props.issue;
+function IssueRow(_ref) {
+  var issue = _ref.issue;
   return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, issue.id), /*#__PURE__*/React.createElement("td", null, issue.status), /*#__PURE__*/React.createElement("td", null, issue.owner), /*#__PURE__*/React.createElement("td", null, issue.created.toDateString()), /*#__PURE__*/React.createElement("td", null, issue.effort), /*#__PURE__*/React.createElement("td", null, issue.due ? issue.due.toDateString() : ''), /*#__PURE__*/React.createElement("td", null, issue.title));
 }
 
-function IssueTable(props) {
-  var issueRows = props.issues.map(function (issue) {
+function IssueTable(_ref2) {
+  var issues = _ref2.issues;
+  var issueRows = issues.map(function (issue) {
     return /*#__PURE__*/React.createElement(IssueRow, {
       key: issue.id,
       issue: issue
@@ -158,16 +173,17 @@ var IssueAdd = /*#__PURE__*/function (_React$Component2) {
     key: "handleSubmit",
     value: function handleSubmit(e) {
       e.preventDefault();
+      var tenDays = 1000 * 60 * 60 * 24 * 10;
       var form = document.forms.issueAdd;
       var issue = {
         owner: form.owner.value,
         title: form.title.value,
-        due: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10) // Add ten days to current date
-
+        due: new Date(new Date().getTime() + tenDays)
       };
-      this.props.createIssue(issue);
-      form.owner.value = "";
-      form.title.value = "";
+      var createIssue = this.props.createIssue;
+      createIssue(issue);
+      form.owner.value = '';
+      form.title.value = '';
     }
   }, {
     key: "render",
@@ -183,7 +199,9 @@ var IssueAdd = /*#__PURE__*/function (_React$Component2) {
         type: "text",
         name: "title",
         placeholder: "Title"
-      }), /*#__PURE__*/React.createElement("button", null, "Add"));
+      }), /*#__PURE__*/React.createElement("button", {
+        type: "submit"
+      }, "Add"));
     }
   }]);
 
@@ -209,25 +227,30 @@ var IssueList = /*#__PURE__*/function (_React$Component3) {
   }
 
   _createClass(IssueList, [{
-    key: "createIssue",
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.loadData();
+    }
+  }, {
+    key: "loadData",
     value: function () {
-      var _createIssue = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(issue) {
+      var _loadData = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
         var query, data;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                query = "mutation issueAdd($issue: IssueInputs!) {\n            issueAdd(issue: $issue) {\n                id\n            }\n        }";
+                query = "query {\n            issueList {\n                id title status owner\n                created effort due\n            }\n        }";
                 _context.next = 3;
-                return graphQLFetch(query, {
-                  issue: issue
-                });
+                return graphQLFetch(query);
 
               case 3:
                 data = _context.sent;
 
                 if (data) {
-                  this.loadData();
+                  this.setState({
+                    issues: data.issueList
+                  });
                 }
 
               case 5:
@@ -238,32 +261,32 @@ var IssueList = /*#__PURE__*/function (_React$Component3) {
         }, _callee, this);
       }));
 
-      function createIssue(_x2) {
-        return _createIssue.apply(this, arguments);
+      function loadData() {
+        return _loadData.apply(this, arguments);
       }
 
-      return createIssue;
+      return loadData;
     }()
   }, {
-    key: "loadData",
+    key: "createIssue",
     value: function () {
-      var _loadData = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+      var _createIssue = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(issue) {
         var query, data;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                query = "query {\n            issueList {\n                id title status owner\n                created effort due\n            }\n        }";
+                query = "mutation issueAdd($issue: IssueInputs!) {\n      issueAdd(issue: $issue) {\n        id\n      }\n    }";
                 _context2.next = 3;
-                return graphQLFetch(query);
+                return graphQLFetch(query, {
+                  issue: issue
+                });
 
               case 3:
                 data = _context2.sent;
 
                 if (data) {
-                  this.setState({
-                    issues: data.issueList
-                  });
+                  this.loadData();
                 }
 
               case 5:
@@ -274,22 +297,18 @@ var IssueList = /*#__PURE__*/function (_React$Component3) {
         }, _callee2, this);
       }));
 
-      function loadData() {
-        return _loadData.apply(this, arguments);
+      function createIssue(_x2) {
+        return _createIssue.apply(this, arguments);
       }
 
-      return loadData;
+      return createIssue;
     }()
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.loadData();
-    }
   }, {
     key: "render",
     value: function render() {
+      var issues = this.state.issues;
       return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", null, "Issue Tracker"), /*#__PURE__*/React.createElement(IssueFilter, null), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueTable, {
-        issues: this.state.issues
+        issues: issues
       }), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueAdd, {
         createIssue: this.createIssue
       }));
