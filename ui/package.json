@@ -7,7 +7,8 @@
     "start": "nodemon -w uiserver.js -w .env uiserver.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "babel src --out-dir public",
-    "watch": "babel src --out-dir public --watch --verbose"
+    "watch": "babel src --out-dir public --watch --verbose",
+    "lint": "eslint . --ext js,jsx --ignore-pattern public"
   },
   "author": "",
   "license": "ISC",
