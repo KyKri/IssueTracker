@@ -1,6 +1,12 @@
 // Imports
+/* eslint "global-require": "off" */
+/* eslint "import/no-extraneous-dependencies": "off" */
+const webpack = require('webpack');
+const devMiddleware = require('webpack-dev-middleware');
+const hotMiddleware = require('webpack-hot-middleware');
 const express = require('express');
 const proxy = require('http-proxy-middleware');
+const config = require('./webpack.config.js');
 require('dotenv').config();
 
 // Variables
@@ -11,6 +17,22 @@ const env = { UI_API_ENDPOINT };
 
 // Express config
 const app = express();
+
+// HMR config
+const enableHMR = (process.env.ENABLE_HMR || 'true') === 'true';
+
+if (enableHMR && (process.env.NODE_ENV !== 'production')) {
+  console.log('Adding dev middleware, enabling HMR.');
+
+  config.entry.app.push('webpack-hot-middleware/client');
+  config.plugins = config.plugins || [];
+  config.plugins.push(new webpack.HotModuleReplacementPlugin());
+
+  const compiler = webpack(config);
+  app.use(devMiddleware(compiler));
+  app.use(hotMiddleware(compiler));
+}
+
 app.use(express.static('public'));
 
 if (apiProxyTarget) {
