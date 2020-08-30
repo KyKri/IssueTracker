@@ -4,10 +4,14 @@
   "description": "Following along from the book Pro MERN Stack",
   "main": "index.js",
   "scripts": {
+    "#start": "UI Server. HMR is enabled in dev mode",
     "start": "nodemon -w uiserver.js -w .env uiserver.js",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "#compile": "Generates JS bundles for production. Use with start",
     "compile": "webpack --mode production",
+    "#watch": "Compile and re-comile on any changes",
     "watch": "webpack --watch",
+    "#lint": "Runs ESLint on applicable files",
     "lint": "eslint . --ext js,jsx --ignore-pattern public"
   },
   "author": "",
