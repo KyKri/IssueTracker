@@ -11,7 +11,7 @@ export default function Contents() {
     <Switch>
       <Redirect exact from="/" to="/issues" />
       <Route path="/issues" component={IssueList} />
-      <Route path="report" component={IssueReport} />
+      <Route path="/report" component={IssueReport} />
       <Route component={NotFound} />
     </Switch>
   );
