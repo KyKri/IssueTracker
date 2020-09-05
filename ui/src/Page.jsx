@@ -9,7 +9,6 @@ function NavBar() {
       <a href="/#/issues">Issue List</a>
       {' | '}
       <a href="/#/report">Report</a>
-      {' | '}
     </nav>
   );
 }
