@@ -14,7 +14,9 @@ export default class IssueDetail extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { match: { params: { id: prevId } } } = prevProps;
-    const { match: { params: { id } } } = this.props;
+    let { match: { params: { id } } } = this.props;
+
+    id = parseInt(id, 10);
 
     if (prevId !== id) {
       this.loadData();
@@ -22,12 +24,14 @@ export default class IssueDetail extends React.Component {
   }
 
   async loadData() {
-    const { match: { params: { id } } } = this.props;
+    let { match: { params: { id } } } = this.props;
     const query = `query issue($id: Int!) {
       issue (id: $id) {
         id description
       }
     }`;
+
+    id = parseInt(id, 10);
 
     const data = await graphQLFetch(query, { id });
 
