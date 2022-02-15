@@ -1,7 +1,7 @@
 import React from 'react';
 
 function format(num) {
-  return num != null ? num.toString : '';
+  return num != null ? num.toString() : '';
 }
 
 function unformat(str) {
