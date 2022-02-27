@@ -1,11 +1,11 @@
 import React from 'react';
 
 function displayFormat(date) {
-  return (date != null) ? date.toDateString() : '';
+  return (date != null && date !== '') ? date.toDateString() : '';
 }
 
 function editFormat(date) {
-  return (date != null) ? date.toISOString().substr(0, 10) : '';
+  return (date != null && date !== '') ? date.toISOString().substr(0, 10) : '';
 }
 
 function unformat(str) {
@@ -17,7 +17,7 @@ export default class DateInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = ({
-      value: editFormat(this.props),
+      value: editFormat(props.value),
       focused: false,
       valid: true,
     });
@@ -51,8 +51,9 @@ export default class DateInput extends React.Component {
   render() {
     const { value, valid, focused } = this.state;
     const { value: origValue, name } = this.props;
+    const dateValue = new Date(origValue);
     const className = (!valid && !focused) ? 'invalid' : '';
-    const displayValue = (focused || !valid) ? value : displayFormat(origValue);
+    const displayValue = (focused || !valid) ? value : displayFormat(dateValue);
     return (
       <input
         type="text"
