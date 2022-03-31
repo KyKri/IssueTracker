@@ -3,15 +3,18 @@ import { Link } from 'react-router-dom';
 
 import graphQLFetch from './graphQLFetch.js';
 import NumInput from './NumInput.jsx';
+import DateInput from './DateInput.jsx';
 
 export default class IssueEdit extends React.Component {
   constructor() {
     super();
     this.state = {
       issue: {},
+      invalidFields: {},
     };
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onValidityChange = this.onValidityChange.bind(this);
   }
 
   componentDidMount() {
@@ -34,6 +37,15 @@ export default class IssueEdit extends React.Component {
     }));
   }
 
+  onValidityChange(event, valid) {
+    const { name } = event.target;
+    this.setState((prevState) => {
+      const invalidFields = { ...prevState.invalidFields, [name]: !valid };
+      if (valid) { delete invalidFields[name]; }
+      return { invalidFields };
+    });
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     const { issue } = this.state;
@@ -54,12 +66,11 @@ export default class IssueEdit extends React.Component {
 
     if (data) {
       const { issue } = data;
-      issue.due = issue.due ? issue.due.toDateString() : '';
       issue.owner = issue.owner != null ? issue.owner.toString() : '';
       issue.description = issue.description != null ? issue.description.toString() : '';
-      this.setState({ issue });
+      this.setState({ issue, invalidFields: {} });
     } else {
-      this.setState({ issue: {} });
+      this.setState({ issue: {}, invalidFields: {} });
     }
   }
 
@@ -68,8 +79,10 @@ export default class IssueEdit extends React.Component {
       issue: {
         id, created, effort, owner, description, status, due, title,
       },
+      invalidFields,
     } = this.state;
     const { match: { params: { id: propsId } } } = this.props;
+    let validationMessage;
 
     if (id == null) {
       if (propsId != null) {
@@ -78,6 +91,11 @@ export default class IssueEdit extends React.Component {
       return null;
     }
 
+    if (Object.keys(invalidFields).length !== 0) {
+      validationMessage = (
+        <div className="error">Please correct the invalid fields before submitting.</div>
+      );
+    }
     return (
       <form onSubmit={this.handleSubmit}>
         <h3>{`Editing issue: ${id}`}</h3>
@@ -108,7 +126,7 @@ export default class IssueEdit extends React.Component {
             </tr>
             <tr>
               <td>Due:</td>
-              <td><input name="due" value={due} onChange={this.onChange} /></td>
+              <td><DateInput name="due" value={due} onValidityChange={this.onValidityChange} onChange={this.onChange} key={id} /></td>
             </tr>
             <tr>
               <td>Title:</td>
@@ -124,6 +142,7 @@ export default class IssueEdit extends React.Component {
             </tr>
           </tbody>
         </table>
+        {validationMessage}
         <Link to={`/edit/${id - 1}`}>Prev</Link>
         {' | '}
         <Link to={`/edit/${id + 1}`}>Next</Link>
