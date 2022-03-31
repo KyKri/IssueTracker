@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import graphQLFetch from './graphQLFetch.js';
 import NumInput from './NumInput.jsx';
 import DateInput from './DateInput.jsx';
+import TextInput from './TextInput.jsx';
 
 export default class IssueEdit extends React.Component {
   constructor() {
@@ -64,14 +65,7 @@ export default class IssueEdit extends React.Component {
     const id = parseInt(rawId, 10);
     const data = await graphQLFetch(query, { id });
 
-    if (data) {
-      const { issue } = data;
-      issue.owner = issue.owner != null ? issue.owner.toString() : '';
-      issue.description = issue.description != null ? issue.description.toString() : '';
-      this.setState({ issue, invalidFields: {} });
-    } else {
-      this.setState({ issue: {}, invalidFields: {} });
-    }
+    this.setState({ issue: data ? data.issue : {}, invalidFields: {} });
   }
 
   render() {
@@ -118,7 +112,7 @@ export default class IssueEdit extends React.Component {
             </tr>
             <tr>
               <td>Owner:</td>
-              <td><input name="owner" value={owner} onChange={this.onChange} /></td>
+              <td><TextInput name="owner" value={owner} onChange={this.onChange} key={id} /></td>
             </tr>
             <tr>
               <td>Effort:</td>
@@ -130,11 +124,11 @@ export default class IssueEdit extends React.Component {
             </tr>
             <tr>
               <td>Title:</td>
-              <td><input size="50" name="title" value={title} onChange={this.onChange} /></td>
+              <td><TextInput size="50" name="title" value={title} onChange={this.onChange} key={id} /></td>
             </tr>
             <tr>
               <td>Description:</td>
-              <td><textarea cols="50" rows="8" name="description" value={description} onChange={this.onChange} /></td>
+              <td><TextInput tag="textarea" cols="50" rows="8" name="description" value={description} onChange={this.onChange} key={id} /></td>
             </tr>
             <tr>
               <td />
