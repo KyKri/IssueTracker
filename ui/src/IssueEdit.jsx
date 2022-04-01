@@ -32,7 +32,7 @@ export default class IssueEdit extends React.Component {
 
   onChange(event, naturalValue) {
     const { name, value: textValue } = event.target;
-    const value = naturalValue === undefined ? textValue : naturalValue;
+    const value = (naturalValue === null || naturalValue === undefined) ? textValue : naturalValue;
     this.setState(prevState => ({
       issue: { ...prevState.issue, [name]: value },
     }));
@@ -47,10 +47,23 @@ export default class IssueEdit extends React.Component {
     });
   }
 
-  handleSubmit(e) {
+  async handleSubmit(e) {
     e.preventDefault();
-    const { issue } = this.state;
-    console.log(issue); // eslint-disable-line no-console
+    const { issue, invalidFields } = this.state;
+    if (Object.keys(invalidFields).length !== 0) { return; }
+
+    const query = `mutation issueUpdate($id: Int!, $changes: IssueUpdateInputs!) {
+      issueUpdate(id: $id, changes: $changes) {
+        id title status owner
+        effort created due description
+      }
+    }`;
+    const { id, created, ...changes } = issue;
+    const data = await graphQLFetch(query, { id, changes });
+    if (data) {
+      this.setState({ issue: data.issueUpdate });
+      alert('Issue has been updated!'); // eslint-disable-line no-alert
+    }
   }
 
   async loadData() {
