@@ -34,6 +34,18 @@ async function add(_, { issue }) {
   return savedIssue;
 }
 
+async function update(_, { id, changes }) {
+  const db = getDb();
+  if (changes.title || changes.owner || changes.status) {
+    const issue = await db.collection('issues').findOne({ id });
+    Object.assign(issue, changes);
+    validate(issue);
+  }
+  await db.collection('issues').updateOne({ id }, { $set: changes });
+  const savedIssue = await db.collection('issues').findOne({ id });
+  return savedIssue;
+}
+
 // Query resolvers
 async function list(_, { status, effortMin, effortMax }) {
   const db = getDb();
@@ -59,4 +71,6 @@ async function get(_, { id }) {
   return issue;
 }
 
-module.exports = { add, list, get };
+module.exports = {
+  add, update, list, get,
+};
