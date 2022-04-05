@@ -8,7 +8,6 @@ import IssueDetail from './IssueDetail.jsx';
 import IssueFilter from './IssueFilter.jsx';
 import IssueTable from './IssueTable.jsx';
 import graphQLFetch from './graphQLFetch.js';
-import { Pane } from 'react-bootstrap/lib/Tab';
 
 export default class IssueList extends React.Component {
   constructor() {
