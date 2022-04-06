@@ -1,9 +1,15 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import URLSearchParams from 'url-search-params';
-import { Button } from 'react-bootstrap';
+import {
+  Button,
+  ButtonToolbar,
+  FormGroup,
+  FormControl,
+  ControlLabel,
+  InputGroup,
+} from 'react-bootstrap';
 
-// eslint-disable-next-line react/prefer-stateless-function
 class IssueFilter extends React.Component {
   constructor({ location: { search } }) {
     super();
@@ -87,22 +93,29 @@ class IssueFilter extends React.Component {
 
     return (
       <div>
-        Status:
-        {' '}
-        <select value={status} onChange={this.onChangeStatus}>
-          <option value="">All</option>
-          <option value="New">New</option>
-        </select>
-        {' '}
-        Effort between:
-        {' '}
-        <input size={5} value={effortMin} onChange={this.onChangeEffortMin} />
-        {' - '}
-        <input size={5} value={effortMax} onChange={this.onChangeEffortMax} />
-        {' '}
-        <Button bsStyle="primary" type="button" onClick={this.applyFilter}>Apply</Button>
-        {' '}
-        <Button bsStyle="primary" type="button" onClick={this.showOriginalFilter} disabled={!changed}>Reset</Button>
+        <FormGroup>
+          <ControlLabel>Status:</ControlLabel>
+          <FormControl
+            componentClass="select"
+            value={status}
+            onChange={this.onChangeStatus}
+          >
+            <option value="">(All)</option>
+            <option value="New">New</option>
+          </FormControl>
+        </FormGroup>
+        <FormGroup>
+          <ControlLabel>Effort between:</ControlLabel>
+          <InputGroup>
+            <FormControl value={effortMin} onChange={this.onChangeEffortMin} />
+            <InputGroup.Addon>-</InputGroup.Addon>
+            <FormControl value={effortMax} onChange={this.onChangeEffortMax} />
+          </InputGroup>
+        </FormGroup>
+        <ButtonToolbar>
+          <Button bsStyle="primary" type="button" onClick={this.applyFilter}>Apply</Button>
+          <Button bsStyle="primary" type="button" onClick={this.showOriginalFilter} disabled={!changed}>Reset</Button>
+        </ButtonToolbar>
       </div>
     );
   }
