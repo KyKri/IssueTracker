@@ -169,7 +169,7 @@ export default class IssueEdit extends React.Component {
               </Col>
             </FormGroup>
             <FormGroup
-              validationState={invalidFields.length ? 'error' : null}
+              validationState={invalidFields.due ? 'error' : null}
             >
               <Col sm={3} componentClass={ControlLabel}>Due</Col>
               <Col sm={9}>
