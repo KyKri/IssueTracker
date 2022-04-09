@@ -10,6 +10,7 @@ import {
   ControlLabel,
   ButtonToolbar,
   Button,
+  Alert,
 } from 'react-bootstrap';
 
 
@@ -24,10 +25,13 @@ export default class IssueEdit extends React.Component {
     this.state = {
       issue: {},
       invalidFields: {},
+      showingValidation: false,
     };
     this.onChange = this.onChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onValidityChange = this.onValidityChange.bind(this);
+    this.showValidation = this.showValidation.bind(this);
+    this.dismissValidation = this.dismissValidation.bind(this);
   }
 
   componentDidMount() {
@@ -59,8 +63,17 @@ export default class IssueEdit extends React.Component {
     });
   }
 
+  showValidation() {
+    this.setState({ showingValidation: true });
+  }
+
+  dismissValidation() {
+    this.setState({ showingValidation: false });
+  }
+
   async handleSubmit(e) {
     e.preventDefault();
+    this.showValidation();
     const { issue, invalidFields } = this.state;
     if (Object.keys(invalidFields).length !== 0) { return; }
 
@@ -99,6 +112,7 @@ export default class IssueEdit extends React.Component {
         id, created, effort, owner, description, status, due, title,
       },
       invalidFields,
+      showingValidation,
     } = this.state;
     const { match: { params: { id: propsId } } } = this.props;
     let validationMessage;
@@ -110,9 +124,11 @@ export default class IssueEdit extends React.Component {
       return null;
     }
 
-    if (Object.keys(invalidFields).length !== 0) {
+    if (Object.keys(invalidFields).length !== 0 && showingValidation) {
       validationMessage = (
-        <div className="error">Please correct the invalid fields before submitting.</div>
+        <Alert bsStyle="danger" onDismiss={this.dismissValidation}>
+          Please correct the invalid fields before submitting.
+        </Alert>
       );
     }
     return (
@@ -212,13 +228,19 @@ export default class IssueEdit extends React.Component {
                 />
               </Col>
             </FormGroup>
-            <ButtonToolbar>
-              <Button bsStyle="primary" type="submit">Submit</Button>
-              <LinkContainer to="/issues">
-                <Button bsStyle="link">Back</Button>
-              </LinkContainer>
-            </ButtonToolbar>
-            {validationMessage}
+            <FormGroup>
+              <Col smOffset={3} sm={6}>
+                <ButtonToolbar>
+                  <Button bsStyle="primary" type="submit">Submit</Button>
+                  <LinkContainer to="/issues">
+                    <Button bsStyle="link">Back</Button>
+                  </LinkContainer>
+                </ButtonToolbar>
+              </Col>
+            </FormGroup>
+            <FormGroup>
+              <Col smOffset={3} sm={6}>{validationMessage}</Col>
+            </FormGroup>
           </Form>
         </Panel.Body>
         <Panel.Footer>
