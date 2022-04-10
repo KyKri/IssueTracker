@@ -4,7 +4,7 @@ import {
   Collapse,
 } from 'react-bootstrap';
 
-export default class Toast extends React.Component() {
+export default class Toast extends React.Component {
   componentDidUpdate() {
     const { showing, onDismiss } = this.props;
     if (showing) {
