@@ -1,11 +1,19 @@
 import React from 'react';
 
 import graphQLFetch from './graphQLFetch.js';
+import Toast from './Toast.jsx';
 
 export default class IssueDetail extends React.Component {
   constructor() {
     super();
-    this.state = { issue: {} };
+    this.state = {
+      issue: {},
+      toastVisible: false,
+      toastMessage: '',
+      toastType: 'info',
+    };
+    this.showError = this.showError.bind(this);
+    this.dismissToast = this.dismissToast.bind(this);
   }
 
   componentDidMount() {
@@ -33,7 +41,7 @@ export default class IssueDetail extends React.Component {
 
     id = parseInt(id, 10);
 
-    const data = await graphQLFetch(query, { id });
+    const data = await graphQLFetch(query, { id }, this.showError);
 
     if (data) {
       this.setState({ issue: data.issue });
@@ -42,12 +50,32 @@ export default class IssueDetail extends React.Component {
     }
   }
 
+  showError(message) {
+    this.setState({
+      toastVisible: true, toastMessage: message, toastType: 'danger',
+    });
+  }
+
+  dismissToast() {
+    this.setState({ toastVisible: false });
+  }
+
   render() {
-    const { issue: { description } } = this.state;
+    const {
+      issue: { description },
+      toastVisible, toastMessage, toastType,
+    } = this.state;
     return (
       <div>
         <h3>Description</h3>
         <pre>{description}</pre>
+        <Toast
+          showing={toastVisible}
+          onDismiss={this.dismissToast}
+          bsStyle={toastType}
+        >
+          {toastMessage}
+        </Toast>
       </div>
     );
   }
