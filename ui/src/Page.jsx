@@ -6,8 +6,6 @@ import {
   NavDropdown,
   MenuItem,
   Glyphicon,
-  Tooltip,
-  OverlayTrigger,
   Grid,
 } from 'react-bootstrap';
 import {
@@ -34,15 +32,6 @@ function NavBar() {
         </LinkContainer>
       </Nav>
       <Nav pullRight>
-        <NavItem>
-          <OverlayTrigger
-            placement="left"
-            delayShow={1000}
-            overlay={<Tooltip id="create-issue">Create Issue</Tooltip>}
-          >
-            <Glyphicon glyph="plus" />
-          </OverlayTrigger>
-        </NavItem>
         <NavDropdown
           id="user-dropdown"
           title={<Glyphicon glyph="option-vertical" />}
