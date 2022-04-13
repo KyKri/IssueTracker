@@ -30,6 +30,7 @@ class IssueAddNavItem extends React.Component {
     this.hideModal = this.hideModal.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.showError = this.showError.bind(this);
+    this.dismissToast = this.dismissToast.bind(this);
   }
 
   showModal() {
@@ -50,6 +51,7 @@ class IssueAddNavItem extends React.Component {
       title: form.title.value,
       due: new Date(new Date().getTime() + tenDays),
     };
+
     const query = `mutation issueAdd($issue: IssueInputs!) {
       issueAdd(issue: $issue) {
         id
@@ -61,6 +63,7 @@ class IssueAddNavItem extends React.Component {
     if (data) {
       const { history } = this.props;
       history.push(`/edit/${data.issueAdd.id}`);
+      this.hideModal();
     }
   }
 
@@ -101,7 +104,7 @@ class IssueAddNavItem extends React.Component {
             <Form name="issueAdd">
               <FormGroup>
                 <ControlLabel>Title:</ControlLabel>
-                <FormControl type="text" autoFocus />
+                <FormControl name="title" autoFocus />
               </FormGroup>
               <FormGroup>
                 <ControlLabel>Owner:</ControlLabel>
