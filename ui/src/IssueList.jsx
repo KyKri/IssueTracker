@@ -3,7 +3,6 @@ import URLSearchParams from 'url-search-params';
 import { Route } from 'react-router-dom';
 import { Panel } from 'react-bootstrap';
 
-import IssueAdd from './IssueAdd.jsx';
 import IssueDetail from './IssueDetail.jsx';
 import IssueFilter from './IssueFilter.jsx';
 import IssueTable from './IssueTable.jsx';
@@ -19,7 +18,6 @@ export default class IssueList extends React.Component {
       toastMessage: '',
       toastType: 'info',
     };
-    this.createIssue = this.createIssue.bind(this);
     this.closeIssue = this.closeIssue.bind(this);
     this.deleteIssue = this.deleteIssue.bind(this);
     this.showSuccess = this.showSuccess.bind(this);
@@ -72,19 +70,6 @@ export default class IssueList extends React.Component {
 
     if (data) {
       this.setState({ issues: data.issueList });
-    }
-  }
-
-  async createIssue(issue) {
-    const query = `mutation issueAdd($issue: IssueInputs!) {
-      issueAdd(issue: $issue) {
-        id
-      }
-    }`;
-    const data = await graphQLFetch(query, { issue }, this.showError);
-
-    if (data) {
-      this.loadData();
     }
   }
 
@@ -164,7 +149,6 @@ export default class IssueList extends React.Component {
           </Panel.Body>
         </Panel>
         <IssueTable issues={issues} closeIssue={this.closeIssue} deleteIssue={this.deleteIssue} />
-        <IssueAdd createIssue={this.createIssue} />
         <Route path={`${match.path}/:id`} component={IssueDetail} />
         <Toast
           showing={toastVisible}
