@@ -13,6 +13,7 @@ import {
 } from 'react-router-bootstrap';
 
 import Contents from './Contents.jsx';
+import IssueAddNavItem from './IssueAddNavItem.jsx';
 
 function NavBar() {
   return (
@@ -32,6 +33,7 @@ function NavBar() {
         </LinkContainer>
       </Nav>
       <Nav pullRight>
+        <IssueAddNavItem />
         <NavDropdown
           id="user-dropdown"
           title={<Glyphicon glyph="option-vertical" />}
