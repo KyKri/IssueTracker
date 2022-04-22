@@ -17,8 +17,14 @@ SourceMapSupport.install();
 // Variables
 const port = process.env.UI_SERVER_PORT || 8000;
 const apiProxyTarget = process.env.API_PROXY_TARGET;
-const UI_API_ENDPOINT = process.env.UI_API_ENDPOINT || 'http://localhost:3000/graphql';
-const env = { UI_API_ENDPOINT };
+
+if (!process.env.UI_API_ENDPOINT) {
+  process.env.UI_API_ENDPOINT = 'http://localhost:3000/graphql';
+}
+
+if (!process.env.UI_SERVER_API_ENDPOINT) {
+  process.env.UI_SERVER_API_ENDPOINT = process.env.UI_API_ENDPOINT;
+}
 
 // HMR config
 const enableHMR = (process.env.ENABLE_HMR || 'true') === 'true';
@@ -48,6 +54,7 @@ if (apiProxyTarget) {
 }
 
 app.get('/env.js', (req, res) => {
+  const env = { UI_API_ENDPOINT: process.env.UI_API_ENDPOINT };
   res.send(`window.ENV = ${JSON.stringify(env)}`);
 });
 
