@@ -58,12 +58,8 @@ app.get('/env.js', (req, res) => {
   res.send(`window.ENV = ${JSON.stringify(env)}`);
 });
 
-app.get('/about', (req, res, next) => {
+app.get('*', (req, res, next) => {
   render(req, res, next);
-});
-
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve('public/index.html'));
 });
 
 app.listen(port, () => {
