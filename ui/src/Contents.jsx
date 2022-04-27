@@ -5,8 +5,7 @@ import IssueList from './IssueList.jsx';
 import IssueReport from './IssueReport.jsx';
 import IssueEdit from './IssueEdit.jsx';
 import About from './About.jsx';
-
-const NotFound = () => <h1>Page Not Found</h1>;
+import NotFound from './NotFound.jsx';
 
 export default function Contents() {
   return (
