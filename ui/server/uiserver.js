@@ -2,7 +2,6 @@
 import express from 'express';
 import proxy from 'http-proxy-middleware';
 import dotenv from 'dotenv';
-import path from 'path';
 import SourceMapSupport from 'source-map-support';
 
 // Custom imports
