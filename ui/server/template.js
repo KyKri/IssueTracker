@@ -15,9 +15,9 @@ export default function template(body, data) {
       <!-- Page generated from template -->
       <div id="content">${body}</div>
       <script>window.__INITIAL_DATA__ = ${JSON.stringify(data)}</script>
-      <script src="/env.js" />
-      <script src="/vendor.bundle.js" />
-      <script src="/app.bundle.js" />
+      <script src="/env.js"></script>
+      <script src="/vendor.bundle.js"></script>
+      <script src="/app.bundle.js"></script>
     </body>
   </html>
   `;
