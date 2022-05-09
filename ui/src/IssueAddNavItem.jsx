@@ -15,7 +15,7 @@ import {
 import { withRouter } from 'react-router-dom';
 
 import graphQLFetch from './graphQLFetch.js';
-import withToast from './Toast.jsx';
+import withToast from './withToast.jsx';
 
 class IssueAddNavItem extends React.Component {
   constructor(props) {
