@@ -4,7 +4,7 @@
 const owners = ['Xelyk', 'Xyran', 'Xevkin', 'Bryxan', 'Xeriyl'];
 const statuses = ['New', 'Assigned', 'Fixed', 'Closed'];
 
-const initialCount = db.issues.count();
+const { current: initialCount } = db.counters.findOne({ _id: 'issues' });
 
 for (let i = 0; i < 100; i++) {
   const randomCreatedDate = (new Date()) - Math.floor(Math.random() * 60) * 1000 * 60 * 60 * 24;
