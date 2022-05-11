@@ -101,7 +101,7 @@ async function counts(_, { status, effortMin, effortMax }) {
     { $match: filter },
     {
       $group: {
-        _id: { onwer: '$owner', status: '$status' },
+        _id: { owner: '$owner', status: '$status' },
         count: { $sum: 1 },
       },
     },
