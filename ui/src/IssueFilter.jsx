@@ -12,6 +12,8 @@ import {
   Col,
 } from 'react-bootstrap';
 
+const statuses = ['New', 'Assigned', 'Fixed', 'Closed'];
+
 class IssueFilter extends React.Component {
   constructor({ location: { search } }) {
     super();
@@ -92,6 +94,9 @@ class IssueFilter extends React.Component {
   render() {
     const { status, changed } = this.state;
     const { effortMin, effortMax } = this.state;
+    const statusOptions = statuses.map(statusOption => (
+      <option key={statusOption} value={statusOption}>{statusOption}</option>
+    ));
 
     return (
       <Row>
@@ -104,7 +109,7 @@ class IssueFilter extends React.Component {
               onChange={this.onChangeStatus}
             >
               <option value="">(All)</option>
-              <option value="New">New</option>
+              {statusOptions}
             </FormControl>
           </FormGroup>
         </Col>
