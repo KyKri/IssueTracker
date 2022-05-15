@@ -27,7 +27,7 @@ type IssueCounts {
   Closed: Int
 }
 
-type IssueListWithPagess {
+type IssueListWithPages {
   issues: [Issue!]!
   pages: Int
 }
