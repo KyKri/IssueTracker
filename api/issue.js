@@ -85,7 +85,7 @@ async function list(_, {
     .sort({ id: 1 })
     .skip(PAGE_SIZE * (page - 1))
     .limit(PAGE_SIZE);
-  
+
   const totalCount = await cursor.count(false);
   const issues = cursor.toArray();
   const pages = Math.ceil(totalCount / PAGE_SIZE);
