@@ -1,5 +1,9 @@
+// Imports
 const { UserInputError } = require('apollo-server-express');
 const { getDb, getNextSequence } = require('./db');
+
+// Constants
+const PAGE_SIZE = 10;
 
 // Validation
 function validate(issue) {
@@ -61,7 +65,9 @@ async function remove(_, { id }) {
 }
 
 // Query resolvers
-async function list(_, { status, effortMin, effortMax }) {
+async function list(_, {
+  status, effortMin, effortMax, page,
+}) {
   const db = getDb();
   const filter = {};
 
@@ -75,8 +81,16 @@ async function list(_, { status, effortMin, effortMax }) {
     if (effortMax !== undefined) { filter.effort.$lte = effortMax; }
   }
 
-  const issues = await db.collection('issues').find(filter).toArray();
-  return issues;
+  const cursor = db.collection('issues').find(filter)
+    .sort({ id: 1 })
+    .skip(PAGE_SIZE * (page - 1))
+    .limit(PAGE_SIZE);
+  
+  const totalCount = await cursor.count(false);
+  const issues = cursor.toArray();
+  const pages = Math.ceil(totalCount / PAGE_SIZE);
+
+  return { issues, pages };
 }
 
 async function get(_, { id }) {
