@@ -30,22 +30,29 @@ class IssueList extends React.Component {
       vars.selectedId = idInt;
     }
 
+    let page = parseInt(params.get('page'), 10);
+    if (Number.isNaN(page)) { page = 1; }
+    vars.page = page;
+
     const query = `query issueList(
         $status: StatusType
         $effortMin: Int
         $effortMax: Int
         $hasSelection: Boolean!
         $selectedId: Int!
+        $page: Int
       ) {
           issueList(
             status: $status
             effortMin: $effortMin
             effortMax: $effortMax
+            page: $page
           ) {
             issues {
               id title status owner
               created effort due
             }
+            pages
           }
           issue(id : $selectedId) @include (if : $hasSelection) {
             id description
