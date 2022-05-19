@@ -1,6 +1,6 @@
 import React from 'react';
 import URLSearchParams from 'url-search-params';
-import { Panel, Pagination } from 'react-bootstrap';
+import { Panel, Pagination, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import IssueDetail from './IssueDetail.jsx';
@@ -96,6 +96,7 @@ class IssueList extends React.Component {
     };
     this.closeIssue = this.closeIssue.bind(this);
     this.deleteIssue = this.deleteIssue.bind(this);
+    this.restoreIssue = this.restoreIssue.bind(this);
   }
 
   componentDidMount() {
@@ -166,8 +167,28 @@ class IssueList extends React.Component {
         newList.splice(index, 1);
         return { issues: newList };
       });
-      showSuccess(`Deleted issue ${id} successfully.`);
+      const undoMessage = (
+        <span>
+          {`Deleted issue ${id} successfully.`}
+          <Button bsStyle="link" onClick={() => this.restoreIssue(id)}>
+            UNDO
+          </Button>
+        </span>
+      );
+      showSuccess(undoMessage);
     } else {
+      this.loadData();
+    }
+  }
+
+  async restoreIssue(id) {
+    const query = `mutation issueRestore($id: Int!) {
+      issueRestore(id: $id)
+    }`;
+    const { showSuccess, showError } = this.props;
+    const data = await graphQLFetch(query, { id }, showError);
+    if (data) {
+      showSuccess(`Issue ${id} restored successfully.`);
       this.loadData();
     }
   }
