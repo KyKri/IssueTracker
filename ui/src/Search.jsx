@@ -40,7 +40,8 @@ class Search extends React.Component {
         loadOptions={this.loadOptions}
         filterOption={() => true}
         onChange={this.onChangeSelection}
-        components={{ DropDownIndicator: null }}
+        placeholder="Search"
+        noOptionsMessage={() => 'No results'}
       />
     );
   }
