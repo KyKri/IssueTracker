@@ -16,7 +16,7 @@ routes.post('/signin', async (req, res) => {
   let payload;
   try {
     const ticket = await client.verifyIdToken({ idToken: googleToken });
-    payload = ticket.getPayload;
+    payload = ticket.getPayload();
   } catch (err) {
     res.status(403).send('Invalid credentials');
   }
@@ -28,4 +28,4 @@ routes.post('/signin', async (req, res) => {
   res.json(credentials);
 });
 
-module.exports(routes);
+module.exports = { routes };
