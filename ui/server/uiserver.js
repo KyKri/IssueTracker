@@ -50,11 +50,17 @@ app.use(express.static('public'));
 
 if (apiProxyTarget) {
   app.use('/graphql', proxy({ target: apiProxyTarget }));
+  app.use('/auth', proxy({ target: apiProxyTarget }));
+}
+
+if (!process.env.UI_AUTH_ENDPOINT) {
+  process.env.UI_AUTH_ENDPOINT = 'http://localhost:3000/auth';
 }
 
 app.get('/env.js', (req, res) => {
   const env = {
     UI_API_ENDPOINT: process.env.UI_API_ENDPOINT,
+    UI_AUTH_ENDPOINT: process.env.UI_AUTH_ENDPOINT,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   };
   res.send(`window.ENV = ${JSON.stringify(env)}`);
