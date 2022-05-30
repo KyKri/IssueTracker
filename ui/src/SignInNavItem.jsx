@@ -81,7 +81,7 @@ class SignInNavItem extends React.Component {
         method: 'POST',
       });
       const auth2 = window.gapi.auth2.getAuthInstance();
-      await auth2.singOut();
+      await auth2.signOut();
       this.setState({ user: { signedIn: false, givenName: '' } });
     } catch (error) {
       showError(`Error signing out: ${error}`);
