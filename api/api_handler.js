@@ -3,7 +3,13 @@ const { ApolloServer } = require('apollo-server-express');
 const GraphQLDate = require('./graphql_date');
 const about = require('./about');
 const issue = require('./issue');
+const auth = require('./auth');
 require('dotenv').config();
+
+function getContext({ req }) {
+  const user = auth.getUser(req);
+  return { user };
+}
 
 // GraphQL resolvers
 const resolvers = {
@@ -27,6 +33,7 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs: fs.readFileSync('./schema.graphql', 'utf-8'),
   resolvers,
+  context: getContext,
   formatErrors: (formatError) => {
     console.log(formatError);
     return formatError;
