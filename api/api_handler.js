@@ -15,6 +15,7 @@ function getContext({ req }) {
 const resolvers = {
   Query: {
     about: about.getMessage,
+    user: auth.resolveUser,
     issueList: issue.list,
     issue: issue.get,
     issueCounts: issue.counts,
