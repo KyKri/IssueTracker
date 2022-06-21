@@ -17,10 +17,13 @@ async function render(req, res) {
     const match = matchPath(req.path, activeRoute);
     const index = req.url.indexOf('?');
     const search = index !== -1 ? req.url.substr(index) : null;
-    initialData = await activeRoute.component.fetchData(match, search);
+    initialData = await activeRoute.component.fetchData(match, search, req.headers.cookie);
   }
+  const userData = await Page.fetchData(req.headers.cookie);
 
   store.initialData = initialData;
+  store.userData = userData;
+
   const context = {};
   const element = (
     <StaticRouter location={req.url} context={context}>
