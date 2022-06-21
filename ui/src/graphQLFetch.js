@@ -15,7 +15,7 @@ export default async function graphQLFetch(query, variables = {}, showError = nu
     : process.env.UI_SERVER_API_ENDPOINT;
   try {
     const headers = { 'Content-Type': 'application/json' };
-    if (cookie) { headers.Cookie = cookie; }
+    if (cookie) { headers.cookie = cookie; }
     const response = await fetch(apiEndpoint, {
       method: 'POST',
       headers,
